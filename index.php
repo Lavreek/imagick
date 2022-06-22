@@ -13,8 +13,9 @@
 			$upload_dir = $exp[1];
 			
 			echo "Чтение файла: $value.\n";
-			$im->setResolution(500, 500);
-			
+
+			$im->setResolution(300, 300);
+
 			$im->readImage(pdf_dir."$value");
 
 			echo "Чтение файла: $value - завершено.\n";
@@ -24,19 +25,26 @@
 				$im->previousImage();
 				echo "Следующий лист файла: $value.\n";
 
-				echo "Запись файла: $img_name-$i.jpg.\n";
+				echo "Запись файла: $img_name-$i.png.\n";
 
-		        $im->setImageFormat('jpeg');
+		        $im->setImageFormat('png');
 
 		        if (!is_dir(__DIR__."/$value/"))
 		        	mkdir(__DIR__."/$value/");
+		        $im->setBackgroundColor(new ImagickPixel('#ffffff'));
+		        $im->setImageAlphaChannel($im::ALPHACHANNEL_REMOVE);
 
-		        $im->writeImage(__DIR__."/$value/$img_name-$i.jpg");
-				echo "Запись файла: $img_name-$i.jpg завершена.\n";
+		        $im->setImageCompressionQuality(95);
+		        $im->resizeImage($im->getImageWidth()/1.25, $im->getImageHeight()/1.25, null, 0);
+
+		        $im->writeImage(__DIR__."/$value/$img_name-$i.png");
+				echo "Запись файла: $img_name-$i.png завершена.\n";
 		    }
 			
 			echo "Обработка файла: $value - завершена.\n";
 			$im->clear(); 
+		break;
+
 		}
 	}
 
